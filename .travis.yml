@@ -2,6 +2,11 @@ language: cpp
 dist: trusty
 sudo: false
 
+addons:
+  apt:
+    packages:
+      - libsnappy1
+
 install:
   - set -e
   - echo "clone parent repo and link this repo as plugin to it"
