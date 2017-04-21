@@ -13,7 +13,7 @@ install:
   - cd ../farm
   - echo "clone xtrabackup plugin"
   - git clone --depth=1 https://github.com/AndriiNikitin/mariadb-environs-xtrabackup _plugins/xtrabackup
-  - ./replant.sh m1-bb-10.1-xtrabackup~lastest
+  - ./replant.sh m1-bb-10.1-xtrabackup~latest
   - m1*/download.sh
 
 env:
