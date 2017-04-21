@@ -1,0 +1,32 @@
+language: cpp
+dist: trusty
+sudo: false
+
+install:
+  - set -e
+  - echo "clone parent repo and link this repo as plugin to it"
+  - this_repo=$(pwd)
+  - mkdir ../farm
+  - git clone --depth=1 https://github.com/AndriiNikitin/mariadb-environs ../farm
+  - rm -r ../farm/_plugin/hasky
+  - ln -s $this_repo ../farm/_plugin/hasky
+  - cd ../farm
+  - echo "clone xtrabackup plugin"
+  - git clone --depth=1 https://github.com/AndriiNikitin/mariadb-environs-xtrabackup _plugins/xtrabackup
+  - ./replant.sh m1-bb-10.1-xtrabackup~lastest
+  - m1*/download.sh
+
+env:
+  matrix:
+    - MATRIX_CONFIGURE_REST_ENCRYPTION=0
+    - MATRIX_CONFIGURE_REST_ENCRYPTION=1
+#    - MATRIX_CONFIGURE_INNODB_PLUGIN=1
+#    - MATRIX_CONFIGURE_INNODB_PLUGIN=1 MATRIX_CONFIGURE_REST_ENCRYPTION=1
+
+script:
+  - set +e
+  - rm -rf m1*/config_load
+  - '( [ "$MATRIX_CONFIGURE_REST_ENCRYPTION" == 1 ] && mkdir -p $(echo m1*)/config_load && cp m1*/configure_rest_encryption.sh m1*/config_load/ ) || : '
+  - '( [ "$MATRIX_CONFIGURE_INNODB_PLUGIN" == 1 ]   && mkdir -p $(echo m1*)/config_load && cp m1*/configure_innodb_plugin.sh m1*/config_load/ ) || : '
+  - ./runsuite.sh m1 _plugin/xtrabackup/t
+
