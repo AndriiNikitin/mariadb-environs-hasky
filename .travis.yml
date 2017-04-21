@@ -12,7 +12,7 @@ install:
   - ln -s $this_repo ../farm/_plugin/hasky
   - cd ../farm
   - echo "clone xtrabackup plugin"
-  - git clone --depth=1 https://github.com/AndriiNikitin/mariadb-environs-xtrabackup _plugins/xtrabackup
+  - git clone --depth=1 https://github.com/AndriiNikitin/mariadb-environs-xtrabackup _plugin/xtrabackup
   - ./replant.sh m1-bb-10.1-xtrabackup~latest
   - m1*/download.sh
 
