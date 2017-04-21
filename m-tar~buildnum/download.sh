@@ -15,7 +15,7 @@ mkdir -p __workdir/../_depot/m-tar/__branch-__buildnum
 (
 cd __workdir/../_depot/m-tar/__branch-__buildnum
 if [ ! -f mariadb-*-linux-x86_64.tar.gz  ] ; then 
-  wget -r -np -nd -A "mariadb-*-linux-x86_64.tar.gz" -nc "$urldir-$pref3/"
+  wget -q -r -np -nd -A "mariadb-*-linux-x86_64.tar.gz" -nc "$urldir-$pref3/"
 fi
 
 if [ -f mariadb-*-linux-x86_64.tar.gz ] ; then 
