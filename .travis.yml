@@ -18,20 +18,21 @@ install:
   - cd ../farm
   - echo "clone xtrabackup plugin"
   - git clone --depth=1 https://github.com/AndriiNikitin/mariadb-environs-xtrabackup _plugin/xtrabackup
-  - ./replant.sh m1-bb-10.1-xtrabackup~latest
-  - m1*/download.sh
 
 env:
+  global:
+    - BRANCH=10.1
   matrix:
     - MATRIX_CONFIGURE_REST_ENCRYPTION=0
-#    - MATRIX_CONFIGURE_REST_ENCRYPTION=1
-#    - MATRIX_CONFIGURE_INNODB_PLUGIN=1
-#    - MATRIX_CONFIGURE_INNODB_PLUGIN=1 MATRIX_CONFIGURE_REST_ENCRYPTION=1
+    - MATRIX_CONFIGURE_REST_ENCRYPTION=1
+    - MATRIX_CONFIGURE_INNODB_PLUGIN=1
+    - MATRIX_CONFIGURE_INNODB_PLUGIN=1 MATRIX_CONFIGURE_REST_ENCRYPTION=1
 
 script:
+  - ./replant.sh m1-${BRANCH}~latest
+  - m1*/download.sh
   - set +e
   - rm -rf m1*/config_load
   - '( [ "$MATRIX_CONFIGURE_REST_ENCRYPTION" == 1 ] && mkdir -p $(echo m1*)/config_load && cp m1*/configure_rest_encryption.sh m1*/config_load/ ) || : '
   - '( [ "$MATRIX_CONFIGURE_INNODB_PLUGIN" == 1 ]   && mkdir -p $(echo m1*)/config_load && cp m1*/configure_innodb_plugin.sh m1*/config_load/ ) || : '
   - ./runsuite.sh m1 _plugin/xtrabackup/t
-
