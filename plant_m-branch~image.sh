@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-
+set -x
 . common.sh
 
 wwid=${1:0:2}
@@ -13,7 +13,7 @@ workdir=$(find . -maxdepth 1 -type d -name "$wwid*" | head -1)
 if [[ ! -z $workdir ]]; then
   [[ "$(ls -A $workdir)" ]] && ((>&2 echo "Directory $workdir is not empty") ; exit 1)
 
-  [[ $workdir =~ ($wwid-)([^~@]*)(~)([1-9][0-9]{4}|latest)$ ]] || ((>&2 echo "Couldn't parse format of  $workdir, expected $wwid-branch~15555") ; exit 1)
+  [[ $workdir =~ ($wwid-)([^~@]*)(~)([1-9][0-9]{4}|latest|.*\@.*)$ ]] || ((>&2 echo "Couldn't parse format of  $workdir, expected $wwid-branch~15555") ; exit 1)
 
   [[ -z $branch ]] || ${BASH_REMATCH[2]} == $branch || ((>&2 echo "Branch mismatch - second parameter ($branch) doesn't branch in folder $workdir") ; exit 1)
   branch=${BASH_REMATCH[2]}
@@ -25,12 +25,19 @@ else
   mkdir $workdir
 fi
 
+# if it has @ - that is husky environ inside docker image
+if [[ $buildnum =~ @ ]] ; then
+  
+  _plugin/docker/plant_m-version@image.sh $wwid
+  exit 0
+fi
+
 # at this point detect latest build in $branch with tar centos5 build and use its number
 if [ "$buildnum" == latest ] ; then
   url=http://hasky.askmonty.org/archive/$branch
   for build in $(wget -qq -O - $url | grep -oh 'build-.....' | sort -r | uniq) ; do
     # avoid trusty until MDEV-12370 is fixed
-    if wget -qq -O - $url/$build | grep -qE "kvm-bintar-quantal-amd64" ; then
+    if wget -qq -O - $url/$build | grep -qE "kvm-bintar-centos5-amd64" ; then
       buildnum=${build##*-}
       break
     fi

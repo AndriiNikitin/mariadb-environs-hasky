@@ -6,7 +6,7 @@
 
 # pref1=$(detect_distcode)-$(detect_amd64)
 # pref2=$(detect_distcodeN)-$(detect_amd64)
-pref3=quantal-amd64
+pref3=centos5-amd64
 
 urldir=http://hasky.askmonty.org/archive/__branch/build-__buildnum/kvm-bintar
 
@@ -27,6 +27,6 @@ fi
 
 if [ -f mariadb-*-linux-x86_64.tar.gz ] ; then 
   if [ ! -x bin/mysqld ] ; then
-    tar -zxf mariadb-*-linux-x86_64.tar.gz ${ERN_M_TAR_EXTRA_FLAGS:-\--exclude='mysql-test'} --strip 1
+    tar -zxf mariadb-*-linux-x86_64.tar.gz ${ERN_M_TAR_EXTRA_FLAGS} --strip 1
   fi
 fi)
