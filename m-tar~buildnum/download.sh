@@ -18,7 +18,7 @@ if [ ! -f mariadb-*-linux-x86_64.tar.gz  ] ; then
   echo downloading "$urldir-$pref3/mariadb-*-linux-x86_64.tar.gz"
   wget -q -r -np -nd -A "mariadb-*-linux-x86_64.tar.gz" -nc "$urldir-$pref3/" &
   wgetpid=$!
-  while kill -0 $wgetpid ; do
+  while kill -0 $wgetpid 2>/dev/null ; do
     sleep 10
     echo -n .
   done
