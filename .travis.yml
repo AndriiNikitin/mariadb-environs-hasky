@@ -30,6 +30,8 @@ script:
   - ./replant.sh m1-${BRANCH}
   - ./build_or_download.sh m1
   - set +e
+# limit concurrency to try avoid occasional error 'no space left on device'
+  - sed -i 's/ERN_TEST_CONCURRENCY=10/ERN_TEST_CONCURRENCY=4/' common.sh
   - rm -rf m1*/config_load
   - '( [ "$MATRIX_CONFIGURE_REST_ENCRYPTION" == 1 ] && mkdir -p $(echo m1*)/config_load && cp m1*/configure_rest_encryption.sh m1*/config_load/ ) || : '
   - '( [ "$MATRIX_CONFIGURE_INNODB_PLUGIN" == 1 ]   && mkdir -p $(echo m1*)/config_load && cp m1*/configure_innodb_plugin.sh m1*/config_load/ ) || : '
