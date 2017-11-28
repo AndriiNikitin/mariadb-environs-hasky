@@ -6,7 +6,7 @@ addons:
   apt:
     packages:
       - libsnappy1
-
+      - realpath
 install:
   - set -e
   - echo "clone parent repo and link this repo as plugin to it"
