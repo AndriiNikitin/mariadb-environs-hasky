@@ -8,6 +8,8 @@ wid=${wwid:1:2}
 branch=$2
 buildnum=$3
 
+port=$((3306+$wid))
+
 workdir=$(find . -maxdepth 1 -type d -name "$wwid*" | head -1)
 
 if [[ ! -z $workdir ]]; then
